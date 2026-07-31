@@ -446,31 +446,47 @@ Deploy everything again
 kubectl apply -f .
 ________________________________________
 Common Errors & Fixes
+
 Backend: CrashLoopBackOff
+
 kubectl logs <backend-pod> -n chat-app --previous
+
+
 Usually caused by:
+
 •	Wrong MongoDB URI
 •	Missing Secret
 •	MongoDB Service not created
 ________________________________________
 Frontend: ContainerCreating
+
 kubectl describe pod <frontend-pod> -n chat-app
+
 Check the Events section.
+
 Common causes:
+
 •	Missing ConfigMap (nginx-config)
 •	Image pull issues
 •	Volume mount errors
 ________________________________________
 
 MongoDB Connection Error
+
 getaddrinfo EAI_AGAIN mongodb
 Check:
+
 kubectl get svc -n chat-app
+
 If mongodb service is missing:
+
 kubectl apply -f mongodb-service.yaml
 ________________________________________
 Port Forward
+
 kubectl port-forward svc/frontend 3000:80 -n chat-app
+
 Backend
+
 kubectl port-forward svc/backend 5001:5001 -n chat-app
 
