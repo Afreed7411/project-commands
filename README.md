@@ -254,86 +254,135 @@ Here's a simple step-by-step Kubernetes deployment guide with the commands you u
 
 
 Step 1: Start Minikube
+
 minikube start --driver=docker
 Check status:
 minikube status
 ________________________________________
+
+
+
 Step 2: Build Docker Images
+
 Frontend
+
 cd frontend
+
 docker build -t affu9164/frontend:v1 .
+
 Backend
+
 cd ../backend
+
 docker build -t affu9164/backend:v1 .
 ________________________________________
 Step 3: Push Images to Docker Hub
+
 docker push affu9164/frontend:v1
+
 docker push affu9164/backend:v1
+
 MongoDB uses the official mongo image, so no need to build it.
 ________________________________________
 Step 4: Go to Kubernetes Folder
 cd ../k8s
 ________________________________________
 Step 5: Create Namespace
+
 kubectl apply -f namespace.yaml
+
+
 Verify:
 kubectl get ns
 ________________________________________
 Step 6: Create Persistent Volume Claim
+
 kubectl apply -f mongo-pvc.yaml
+
 Check PVC:
+
 kubectl get pvc -n chat-app
 ________________________________________
 Step 7: Create Secrets
+
 kubectl apply -f backend-secrets.yaml
+
 Check:
+
 kubectl get secrets -n chat-app
 ________________________________________
 Step 8: Create MongoDB Deployment
+
 kubectl apply -f mongodb-deployment.yaml
+
 Create MongoDB Service:
+
 kubectl apply -f mongodb-service.yaml
+
 Check:
+
+
 kubectl get pods -n chat-app
 kubectl get svc -n chat-app
 ________________________________________
 Step 9: Create Backend
+
 kubectl apply -f backend-deployment.yaml
 kubectl apply -f backend-service.yaml
+
 Check:
+
 kubectl get pods -n chat-app
 kubectl get svc -n chat-app
 ________________________________________
 Step 10: Create Frontend ConfigMap
+
 kubectl apply -f frontend-configmap.yaml
+
 Verify:
+
 kubectl get configmap -n chat-app
 ________________________________________
 Step 11: Create Frontend
+
 kubectl apply -f frontend-deployment.yaml
+
 kubectl apply -f frontend-service.yaml
 ________________________________________
+
 Step 12: Verify Everything
+
 Pods
 kubectl get pods -n chat-app
+
 Services
+
 kubectl get svc -n chat-app
 Deployments
+
 kubectl get deployment -n chat-app
 ________________________________________
 Step 13: Access Application
+
 Port Forward
+
 kubectl port-forward svc/frontend 3000:80 -n chat-app
+
 or
 kubectl port-forward svc/frontend-service 3000:80 -n chat-app
 Open
 http://localhost:3000
+
 Backend
+
 kubectl port-forward svc/backend 5001:5001 -n chat-app
+
 Open
+
 http://localhost:5001
 ________________________________________
 Useful Debugging Commands
+
 Check Pods
 kubectl get pods -n chat-app
 Watch pods live
