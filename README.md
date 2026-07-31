@@ -12,12 +12,14 @@ k8s
 
 
 PREREQUISITES (Windows Side)
+
 •	Windows 10/11
+
 •	WSL 2 enabled
 •	Ubuntu installed
 •	Docker Desktop installed
 o	Enable WSL Integration
- 	\
+ 	
 
 
 To deploy an application on a Kubernetes cluster and monitor its performance using Prometheus and Grafana.
@@ -47,7 +49,7 @@ docker ps
 
 
 
- Install kubectl
+Install kubectl
 
  
 curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
@@ -85,8 +87,8 @@ kubectl get nodes
 
 
 Explain:
-Minikube creates a local Kubernetes cluster.
-Minikube is a lightweight, single-node Kubernetes cluster tool for local development
+
+Minikube creates a local Kubernetes cluster. Minikube is a lightweight, single-node Kubernetes cluster tool for local development
 
 
 
