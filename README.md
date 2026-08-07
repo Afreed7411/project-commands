@@ -27,8 +27,12 @@ To deploy an application on a Kubernetes cluster and monitor its performance usi
 
  
 sudo apt update -y
-________________________________________
+_______________________________________________________________________________________________________________________________________________
+ 
+ 
  Install Docker (inside WSL)
+
+ 
  
 sudo apt install docker.io -y
 
@@ -52,10 +56,15 @@ docker ps
 Install kubectl
 
  
+______________________________________________________________________________________________________________________________________________
+
+
 curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
 
 
+
 chmod +x kubectl
+
 
 sudo mv kubectl /usr/local/bin/
 
@@ -67,7 +76,7 @@ Check:
 
 
 kubectl version --client
-________________________________________
+_______________________________________________________________________________________________________________________________________________
  
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 sudo install minikube-linux-amd64 /usr/local/bin/minikube
@@ -103,6 +112,8 @@ Helm is the package manager for Kubernetes, simplifying the definition, installa
 
  
 Install Helm (Package Manager)
+
+_______________________________________________________________________________________________________________________________________________
 curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
 
@@ -110,7 +121,7 @@ Check:
 
 
 helm version
-________________________________________
+_______________________________________________________________________________________________________________________________________________
 Deploy Sample Application (nginx)
 
 
@@ -132,7 +143,7 @@ Access app:
 minikube service nginx
  
 Kubernetes is now running our application inside a Pod.
-________________________________________
+_______________________________________________________________________________________________________________________________________________
 Install Prometheus (Monitoring)
 
 
@@ -171,7 +182,7 @@ up
 
  
 Prometheus is scraping Kubernetes metrics automatically.
-________________________________________
+______________________________________________________________________________________________________________________________________________
 Install Grafana (Visualization)
 
 helm repo add grafana https://grafana.github.io/helm-charts
@@ -196,7 +207,7 @@ Login:
 •	Username: admin
 •	Password: (from above)
 
-________________________________________
+_______________________________________________________________________________________________________________________________________________
   Connect Prometheus to Grafana
 
   
@@ -212,7 +223,7 @@ http://prometheus-server:80
 4.	Save & Test
 
 
-________________________________________
+______________________________________________________________________________________________________________________________________________
 Import Kubernetes Dashboard 
 
 
@@ -229,7 +240,9 @@ Use Dashboard ID:
 •	Node health
 ________________________________________
   Show Live Load (Best Demo)
+  
 kubectl exec -it deploy/nginx -- /bin/bash
+
 Inside pod:
 while true; do wget -q -O- http://localhost; done
 ________________________________________
@@ -248,7 +261,7 @@ Docker Build
 Docker Container Deploy
         ↓
 Application running on port 8081
-
+_______________________________________________________________________________________________________________________________________________
 Here's a simple step-by-step Kubernetes deployment guide with the commands you used, plus the most useful debugging commands.
 3-Tier MERN Application Deployment on Kubernetes (Minikube)
 
@@ -275,18 +288,22 @@ Backend
 cd ../backend
 
 docker build -t affu9164/backend:v1 .
-________________________________________
+_______________________________________________________________________________________________________________________________________________
 Step 3: Push Images to Docker Hub
 
 docker push affu9164/frontend:v1
 
+
+
 docker push affu9164/backend:v1
 
 MongoDB uses the official mongo image, so no need to build it.
-________________________________________
+_______________________________________________________________________________________________________________________________________________
+
+
 Step 4: Go to Kubernetes Folder
 cd ../k8s
-________________________________________
+______________________________________________________________________________________________________________________________________________
 Step 5: Create Namespace
 
 kubectl apply -f namespace.yaml
@@ -294,7 +311,7 @@ kubectl apply -f namespace.yaml
 
 Verify:
 kubectl get ns
-________________________________________
+______________________________________________________________________________________________________________________________________________
 Step 6: Create Persistent Volume Claim
 
 kubectl apply -f mongo-pvc.yaml
@@ -302,7 +319,7 @@ kubectl apply -f mongo-pvc.yaml
 Check PVC:
 
 kubectl get pvc -n chat-app
-________________________________________
+_______________________________________________________________________________________________________________________________________________
 Step 7: Create Secrets
 
 kubectl apply -f backend-secrets.yaml
@@ -310,7 +327,7 @@ kubectl apply -f backend-secrets.yaml
 Check:
 
 kubectl get secrets -n chat-app
-________________________________________
+______________________________________________________________________________________________________________________________________________
 Step 8: Create MongoDB Deployment
 
 kubectl apply -f mongodb-deployment.yaml
@@ -324,7 +341,7 @@ Check:
 
 kubectl get pods -n chat-app
 kubectl get svc -n chat-app
-________________________________________
+_______________________________________________________________________________________________________________________________________________
 Step 9: Create Backend
 
 kubectl apply -f backend-deployment.yaml
@@ -334,7 +351,7 @@ Check:
 
 kubectl get pods -n chat-app
 kubectl get svc -n chat-app
-________________________________________
+_______________________________________________________________________________________________________________________________________________
 Step 10: Create Frontend ConfigMap
 
 kubectl apply -f frontend-configmap.yaml
@@ -342,13 +359,13 @@ kubectl apply -f frontend-configmap.yaml
 Verify:
 
 kubectl get configmap -n chat-app
-________________________________________
+_______________________________________________________________________________________________________________________________________________
 Step 11: Create Frontend
 
 kubectl apply -f frontend-deployment.yaml
 
 kubectl apply -f frontend-service.yaml
-________________________________________
+_______________________________________________________________________________________________________________________________________________
 
 Step 12: Verify Everything
 
@@ -361,7 +378,7 @@ kubectl get svc -n chat-app
 Deployments
 
 kubectl get deployment -n chat-app
-________________________________________
+_______________________________________________________________________________________________________________________________________________
 Step 13: Access Application
 
 Port Forward
@@ -380,20 +397,24 @@ kubectl port-forward svc/backend 5001:5001 -n chat-app
 Open
 
 http://localhost:5001
-________________________________________
+_______________________________________________________________________________________________________________________________________________
 Useful Debugging Commands
 
 Check Pods
+
 kubectl get pods -n chat-app
+
+
 Watch pods live
+
 watch kubectl get pods -n chat-app
-________________________________________
+_______________________________________________________________________________________________________________________________________________
 Check Services
 kubectl get svc -n chat-app
-________________________________________
+_____________________________________________________________________________________________________________________________________________
 Check Deployments
 kubectl get deployment -n chat-app
-________________________________________
+___________________________________________________________________________________________________________________________________________
 View Logs
 Backend
 kubectl logs <backend-pod-name> -n chat-app
@@ -405,33 +426,61 @@ MongoDB
 kubectl logs <mongodb-pod-name> -n chat-app
 ________________________________________
 Describe a Pod
+
 kubectl describe pod <pod-name> -n chat-app
+
 Example
+
+_______________________________________________________________________________________________________________________________________________
 kubectl describe pod backend-xxxx -n chat-app
+
+
+
 Look at the Events section for errors.
-________________________________________
+_______________________________________________________________________________________________________________________________________________
 Check ConfigMaps
+
+
+
 kubectl get configmap -n chat-app
+
+
 Describe ConfigMap
+
+
+
 kubectl describe configmap nginx-config -n chat-app
-________________________________________
+_______________________________________________________________________________________________________________________________________________
 Check Secrets
+
+
 kubectl get secrets -n chat-app
-________________________________________
+_______________________________________________________________________________________________________________________________________________
 Check PVC
+
+
 kubectl get pvc -n chat-app
-________________________________________
+_______________________________________________________________________________________________________________________________________________
 Check Endpoints
+
+
 kubectl get endpoints -n chat-app
-________________________________________
+_______________________________________________________________________________________________________________________________________________
 Restart Deployment
+
+
+
 Backend
+
+
 kubectl rollout restart deployment backend -n chat-app
+
+
 Frontend
 kubectl rollout restart deployment frontend -n chat-app
 MongoDB
 kubectl rollout restart deployment mongodb -n chat-app
-________________________________________
+_______________________________________________________________________________________________________________________________________________
 Delete a Pod
 Backend
 kubectl delete pod -l app=backend -n chat-app
@@ -457,7 +506,7 @@ Usually caused by:
 •	Wrong MongoDB URI
 •	Missing Secret
 •	MongoDB Service not created
-________________________________________
+_______________________________________________________________________________________________________________________________________________
 Frontend: ContainerCreating
 
 kubectl describe pod <frontend-pod> -n chat-app
@@ -469,7 +518,7 @@ Common causes:
 •	Missing ConfigMap (nginx-config)
 •	Image pull issues
 •	Volume mount errors
-________________________________________
+_______________________________________________________________________________________________________________________________________________
 
 MongoDB Connection Error
 
